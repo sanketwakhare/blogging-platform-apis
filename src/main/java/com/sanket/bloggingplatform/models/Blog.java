@@ -24,7 +24,7 @@ public class Blog extends BaseModel {
 
     @ManyToMany
     @JoinTable(name = "blog_authors",
-            joinColumns = @JoinColumn(name = "blog_id", referencedColumnName = "blogId"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"))
+            joinColumns = @JoinColumn(name = "blog_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> authors;
 }
