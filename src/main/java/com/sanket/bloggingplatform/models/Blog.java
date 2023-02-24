@@ -13,6 +13,7 @@ import java.util.List;
 public class Blog extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "blog_id")
     private Long blogId;
 
     private String title;
@@ -24,7 +25,7 @@ public class Blog extends BaseModel {
 
     @ManyToMany
     @JoinTable(name = "blog_authors",
-            joinColumns = @JoinColumn(name = "blog_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+            joinColumns = @JoinColumn(name = "blog_id", referencedColumnName = "blog_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
     private List<User> authors;
 }
