@@ -1,7 +1,7 @@
 package com.sanket.bloggingplatform.models;
 
 public enum BlogStatus {
-    DRAFT,
+    PRIVATE,
     PUBLISHED,
     DELETED
 }
