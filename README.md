@@ -1,7 +1,5 @@
 # Design Multi User Blogging Platform
 
-#### Arpit Bhayani's system design problem
-
 ### Requirements Gathering
 1. There are two types of users: Author and Reader
 2. Author should be able to publish a blog
@@ -101,3 +99,4 @@ Many to Many relation
 ### Resources:
 1. https://howtodoinjava.com/kafka/getting-started-windows-10/
 2. https://howtodoinjava.com/kafka/spring-boot-with-kafka/
+3. Arpit Bhayani's system design problem
