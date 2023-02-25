@@ -33,13 +33,26 @@
 
 ### Entities
 1. User
+    
+        user_id | username | bio | total_blogs
 2. Blog
+    
+        blog_id | title | body | blog_status
 3. UserBlog
+
+        user_id | blog_id
 
 ---
 
 ### Relationships
 
+User (1 -> M) Blog
+
+Blog (1 -> M) User
+
+Many to Many relation
+
+---
 
 ### Kafka service setup steps
 
@@ -48,30 +61,30 @@
 2. Start Zookeeper service 
 
     
-    D:\kafka>start cmd /k bin\windows\zookeeper-server-start.bat config\zookeeper.properties
+        D:\kafka>start cmd /k bin\windows\zookeeper-server-start.bat config\zookeeper.properties
 
 4. Start Kafka service
 
 
-    D:\kafka>start cmd /k bin\windows\kafka-server-start.bat config\server.properties
+        D:\kafka>start cmd /k bin\windows\kafka-server-start.bat config\server.properties
 
 6. Create Kafka Topic
 
 
-    D:\kafka>bin\windows\kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic blogging
-    Created topic blogging.
+        D:\kafka>bin\windows\kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic blogging
+        Created topic blogging.
 
 - You can optionally verify the Kafka stream by starting producer and consumers
 
 5. Start Producer service
 
     
-    D:\kafka>bin\windows\kafka-console-producer.bat --bootstrap-server localhost:9092 --topic blogging
+        D:\kafka>bin\windows\kafka-console-producer.bat --bootstrap-server localhost:9092 --topic blogging
 
 7. Start Consumer service
 
     
-    D:\kafka>bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic blogging --from-beginning
+        D:\kafka>bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic blogging --from-beginning
 
 ---
 
