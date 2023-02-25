@@ -3,6 +3,8 @@ package com.sanket.bloggingplatform.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import java.util.List;
 
@@ -27,5 +29,6 @@ public class Blog extends BaseModel {
     @JoinTable(name = "blog_authors",
             joinColumns = @JoinColumn(name = "blog_id", referencedColumnName = "blog_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<User> authors;
 }

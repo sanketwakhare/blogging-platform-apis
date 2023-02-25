@@ -19,10 +19,13 @@ public class BlogService {
 
     private final KafkaProducerService kafkaProducerService;
 
-    public BlogService(BlogRepository blogRepository, UserRepository userRepository, KafkaProducerService kafkaProducerService) {
+    private final TimeService timeService;
+
+    public BlogService(BlogRepository blogRepository, UserRepository userRepository, KafkaProducerService kafkaProducerService, TimeService timeService) {
         this.blogRepository = blogRepository;
         this.userRepository = userRepository;
         this.kafkaProducerService = kafkaProducerService;
+        this.timeService = timeService;
     }
 
     public Blog createBlog(String title, String body, List<Long> authorIds, BlogStatus blogStatus) {
@@ -36,7 +39,7 @@ public class BlogService {
         blog.setAuthors(authors);
 
         // update epoch timestamp
-        Long now = Instant.now().toEpochMilli();
+        Long now = timeService.getEpochTime();
         blog.setCreatedAt(now);
         blog.setLastModifiedAt(now);
 
@@ -44,7 +47,6 @@ public class BlogService {
 
         // send message to Kafka
         Map<String, Object> data = new HashMap<>();
-        data.put("authorIds", authorIds);
         data.put("blogId", dbBlog.getBlogId());
         kafkaProducerService.sendMessage(EventType.BLOG_CREATED, data);
 
@@ -56,14 +58,12 @@ public class BlogService {
         if(blog.isPresent()) {
             Blog dbBlog = blog.get();
             dbBlog.setBlogStatus(BlogStatus.PUBLISHED);
+            Long now = timeService.getEpochTime();
+            dbBlog.setLastModifiedAt(now);
             blogRepository.saveAndFlush(dbBlog);
 
             // send message to Kafka
-            List<User> authors = dbBlog.getAuthors();
             Map<String, Object> data = new HashMap<>();
-            List<Long> authorIds = new ArrayList<>();
-            authors.forEach(author -> authorIds.add(author.getUserId()));
-            data.put("authorIds", authorIds);
             data.put("blogId", dbBlog.getBlogId());
             kafkaProducerService.sendMessage(EventType.BLOG_PUBLISHED, data);
         }
@@ -74,14 +74,12 @@ public class BlogService {
         if(blog.isPresent()) {
             Blog dbBlog = blog.get();
             dbBlog.setBlogStatus(BlogStatus.DELETED);
+            Long now = timeService.getEpochTime();
+            dbBlog.setLastModifiedAt(now);
             blogRepository.saveAndFlush(dbBlog);
 
             // send message to Kafka
-            List<User> authors = dbBlog.getAuthors();
             Map<String, Object> data = new HashMap<>();
-            List<Long> authorIds = new ArrayList<>();
-            authors.forEach(author -> authorIds.add(author.getUserId()));
-            data.put("authorIds", authorIds);
             data.put("blogId", dbBlog.getBlogId());
             kafkaProducerService.sendMessage(EventType.BLOG_DELETED, data);
         }
