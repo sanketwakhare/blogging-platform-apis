@@ -41,6 +41,38 @@
 ### Relationships
 
 
+### Kafka service setup steps
+
+1. Install Apache Kafka (Zookeeper comes with installation)
+
+2. Start Zookeeper service 
+
+    
+    D:\kafka>start cmd /k bin\windows\zookeeper-server-start.bat config\zookeeper.properties
+
+4. Start Kafka service
+
+
+    D:\kafka>start cmd /k bin\windows\kafka-server-start.bat config\server.properties
+
+6. Create Kafka Topic
+
+
+    D:\kafka>bin\windows\kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic blogging
+    Created topic blogging.
+
+- You can optionally verify the Kafka stream by starting producer and consumers
+
+5. Start Producer service
+
+    
+    D:\kafka>bin\windows\kafka-console-producer.bat --bootstrap-server localhost:9092 --topic blogging
+
+7. Start Consumer service
+
+    
+    D:\kafka>bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic blogging --from-beginning
+
 ---
 
 ### Class Diagram
@@ -50,3 +82,9 @@
 
 ### Schema Diagram
 
+
+---
+
+### Resources:
+1. https://howtodoinjava.com/kafka/getting-started-windows-10/
+2. https://howtodoinjava.com/kafka/spring-boot-with-kafka/
