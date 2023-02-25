@@ -1,11 +1,8 @@
 package com.sanket.bloggingplatform.controller;
 
-import com.sanket.bloggingplatform.dtos.CreateBlogRequestDto;
-import com.sanket.bloggingplatform.dtos.CreateBlogResponseDto;
-import com.sanket.bloggingplatform.dtos.ResponseStatus;
+import com.sanket.bloggingplatform.dtos.*;
 import com.sanket.bloggingplatform.models.Blog;
 import com.sanket.bloggingplatform.models.BlogStatus;
-import com.sanket.bloggingplatform.models.User;
 import com.sanket.bloggingplatform.services.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,5 +38,35 @@ public class BlogController {
             createBlogResponseDto.setMessage(e.getMessage());
         }
         return createBlogResponseDto;
+    }
+
+    @PostMapping("publish-blog")
+    public PublishBlogResponseDto publishBlog(@RequestBody PublishBlogRequestDto publishBlogRequestDto) {
+        PublishBlogResponseDto publishBlogResponseDto = new PublishBlogResponseDto();
+        try {
+            Long blogId = publishBlogRequestDto.getBlogId();
+            blogService.publishBlog(blogId);
+            publishBlogResponseDto.setResponseStatus(ResponseStatus.SUCCESS);
+            publishBlogResponseDto.setMessage("blog published");
+        } catch(Exception e) {
+            publishBlogResponseDto.setResponseStatus(ResponseStatus.SERVER_ERROR);
+            publishBlogResponseDto.setMessage(e.getMessage());
+        }
+        return publishBlogResponseDto;
+    }
+
+    @PostMapping("delete-blog")
+    public DeleteBlogResponseDto publishBlog(@RequestBody DeleteBlogRequestDto deleteBlogRequestDto) {
+        DeleteBlogResponseDto deleteBlogResponseDto = new DeleteBlogResponseDto();
+        try {
+            Long blogId = deleteBlogRequestDto.getBlogId();
+            blogService.deleteBlog(blogId);
+            deleteBlogResponseDto.setResponseStatus(ResponseStatus.SUCCESS);
+            deleteBlogResponseDto.setMessage("blog deleted");
+        } catch(Exception e) {
+            deleteBlogResponseDto.setResponseStatus(ResponseStatus.SERVER_ERROR);
+            deleteBlogResponseDto.setMessage(e.getMessage());
+        }
+        return deleteBlogResponseDto;
     }
 }
